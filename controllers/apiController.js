@@ -11,4 +11,11 @@ module.exports = function(app) {
             res.send(bugs);
         });
     });
+
+    app.get('/api/bug/:id', function(req, res) {
+        Bugs.findById({_id: req.params.id}, function(err, bug) {
+            if(err) throw err;
+            res.send(bug);
+        });
+    });
 };
