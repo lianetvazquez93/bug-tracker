@@ -18,4 +18,11 @@ module.exports = function(app) {
             res.send(bug);
         });
     });
+
+    app.get('/api/bugs/:status', function(req, res) {
+        Bugs.find({status: req.params.status}, function(err, bugs) {
+            if(err) throw err;
+            res.send(bugs);
+        });
+    });
 };
