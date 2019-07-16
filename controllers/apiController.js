@@ -27,24 +27,15 @@ module.exports = function(app) {
     });
 
     app.post('/api/bug', function(req, res) {
-        if(req.body.id) {
-            Bugs.findByIdAndUpdate(req.body.id, {title: req.body.title, 
-                body: req.body.body, reporterEmail: req.body.reporterEmail, 
-                status: req.body.status}, function(err, bug) {
-                    if(err) throw err;
-                    res.send('Success');
-                });
-        } else {
-            var newBug = Bugs({
-                title: req.body.title,
-                body: req.body.body,
-                reporterEmail: req.body.reporterEmail,
-                status: "opened"
-            });
-            newBug.save(function(err) {
-                if(err) throw err;
-                res.send('Success');
-            });
-        }
+        var newBug = Bugs({
+            title: req.body.title,
+            body: req.body.body,
+            reporterEmail: req.body.reporterEmail,
+            status: "opened"
+        });
+        newBug.save(function(err) {
+            if(err) throw err;
+            res.send('Success');
+        });
     });
 };
