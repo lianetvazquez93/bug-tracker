@@ -38,4 +38,11 @@ module.exports = function(app) {
             res.send('Success');
         });
     });
+
+    app.delete('/api/bug', function(req, res) {
+        Bugs.findByIdAndRemove(req.body.id, function(err) {
+            if(err) throw err;
+            res.send('Success');
+        });
+    });
 };
