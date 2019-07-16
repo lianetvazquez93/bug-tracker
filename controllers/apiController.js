@@ -28,9 +28,9 @@ module.exports = function(app) {
 
     app.post('/api/bug', function(req, res) {
         var newBug = Bugs({
-            title: req.params.title,
-            body: req.params.body,
-            reporterEmail: req.params.reporterEmail,
+            title: req.body.title,
+            body: req.body.body,
+            reporterEmail: req.body.reporterEmail,
             status: "opened"
         });
         newBug.save(function(err) {
