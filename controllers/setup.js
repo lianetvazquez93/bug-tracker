@@ -1,4 +1,4 @@
-var Bugs = require('../models/bugModel');
+var Bugs = require('../models/bug');
 
 module.exports = function(app) {
     app.get('/api/setupBugs', function(req, res) {

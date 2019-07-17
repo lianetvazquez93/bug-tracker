@@ -1,4 +1,4 @@
-var Bugs = require('../models/bugModel');
+var Bugs = require('../models/bug');
 var bodyParser = require('body-parser');
 
 module.exports = function(app) {
