@@ -6,4 +6,6 @@ module.exports = (app) => {
     app.use(bodyParser.urlencoded({extended: true}));
 
     app.get('/api/bugs', apiController.getAll);
+
+    app.get('/api/bug/:id', apiController.getById);
 }

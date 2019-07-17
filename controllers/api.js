@@ -3,13 +3,22 @@ const bodyParser = require('body-parser');
 
 const getAll = async (req, res) => {
     try {
-        let bugs = Bugs.find();
+        let bugs = await Bugs.find();
         res.send(bugs);
     } catch(err) {
         console.error(`Error: ${err.message}`);
         res.send('Bad Request');
     }
 };
+
+const getById = async (req, res) => {
+    try {
+        let bug = await Bugs.findById({_id: req.params.id});
+        res.send(bug);
+    } catch(err) {
+        console.error(`Error: ${err.message}`);
+    }
+}
 
 /*module.exports = function(app) {
     app.use(bodyParser.json());
@@ -58,5 +67,6 @@ const getAll = async (req, res) => {
 };
 */
 module.exports = {
-    getAll: getAll
+    getAll: getAll,
+    getById: getById
 };
