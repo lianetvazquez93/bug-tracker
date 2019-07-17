@@ -1,14 +1,14 @@
-var mongoose = require('mongoose');
+const mongoose = require('mongoose');
 
-var Schema = mongoose.Schema;
+const { Schema } = mongoose;
 
-var bugSchema = new Schema({
+const bugSchema = new Schema({
     title: String,
     body: String,
     reporterEmail: String,
     status: String
 });
 
-var Bugs = mongoose.model('Bugs', bugSchema);
+const Bugs = mongoose.model('Bugs', bugSchema);
 
 module.exports = Bugs;

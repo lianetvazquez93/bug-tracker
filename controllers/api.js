@@ -1,5 +1,5 @@
-var Bugs = require('../models/bug');
-var bodyParser = require('body-parser');
+const Bugs = require('../models/bug');
+const bodyParser = require('body-parser');
 
 module.exports = function(app) {
     app.use(bodyParser.json());
