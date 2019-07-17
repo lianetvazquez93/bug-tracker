@@ -1,4 +1,5 @@
 const Bugs = require('../models/bug');
+const bodyParser = require('body-parser');
 
 const getAll = async (req, res) => {
     try {
@@ -6,7 +7,7 @@ const getAll = async (req, res) => {
         res.send(bugs);
     } catch(err) {
         console.error(`Error: ${err.message}`);
-        res.status(400);
+        res.send('Bad Request');
     }
 };
 
