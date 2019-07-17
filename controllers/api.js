@@ -1,7 +1,16 @@
 const Bugs = require('../models/bug');
-const bodyParser = require('body-parser');
 
-module.exports = function(app) {
+const getAll = async (req, res) => {
+    try {
+        let bugs = Bugs.find();
+        res.send(bugs);
+    } catch(err) {
+        console.error(`Error: ${err.message}`);
+        res.status(400);
+    }
+};
+
+/*module.exports = function(app) {
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({extended: true}));
 
@@ -46,3 +55,5 @@ module.exports = function(app) {
         });
     });
 };
+*/
+export default getAll;
