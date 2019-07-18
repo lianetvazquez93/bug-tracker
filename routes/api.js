@@ -10,4 +10,6 @@ module.exports = (app) => {
     app.post('/api/bug', apiController.reportNewBug);
 
     app.delete('/api/bug', apiController.deleteBug);
+
+    app.put('/api/bug', apiController.updateBug);
 }

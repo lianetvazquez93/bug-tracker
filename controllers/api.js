@@ -56,10 +56,25 @@ const deleteBug = async (req, res) => {
     }
 };
 
+const updateBug = async (req, res) => {
+    try {
+        await Bugs.findByIdAndUpdate(req.body.id, {
+            title: req.body.title,
+            body: req.body.body,
+            reporterEmail: req.body.reporterEmail,
+            status: req.body.status
+        });
+        res.send('Success');
+    } catch(error) {
+        handleError(error, res);
+    }
+};
+
 module.exports = {
     getAll,
     getById,
     getByStatus,
     reportNewBug, 
-    deleteBug
+    deleteBug,
+    updateBug
 };
