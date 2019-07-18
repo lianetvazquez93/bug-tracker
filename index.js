@@ -6,6 +6,10 @@ let setupController = require('./controllers/setup');
 let apiRoutes = require('./routes/api');
 
 mongoose.connect(process.env.DB_URI, {useNewUrlParser: true});
+
+app.use(express.json());
+app.use(express.urlencoded({extended: true}));
+
 setupController(app);
 apiRoutes(app);
 

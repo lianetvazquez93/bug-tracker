@@ -1,50 +1,38 @@
 const Bugs = require('../models/bug');
-const bodyParser = require('body-parser');
+
+const handleError = (error, res) => {
+    console.error(`Error: ${error.message}`);
+    res.status(400).send({Error: error.message});
+};
 
 const getAll = async (req, res) => {
     try {
         let bugs = await Bugs.find();
         res.send(bugs);
     } catch(err) {
-        console.error(`Error: ${err.message}`);
-        res.send('Bad Request');
+        handleError(err, res);
     }
 };
 
 const getById = async (req, res) => {
     try {
-        let bug = await Bugs.findById({_id: req.params.id});
+        let bug = await Bugs.findById(req.params.id);
         res.send(bug);
-    } catch(err) {
-        console.error(`Error: ${err.message}`);
+    } catch(error) {
+        handleError(error, res);
+    }
+}
+
+const getByStatus = async (req, res) => {
+    try {
+        let bugs = await Bugs.find({status: req.params.status});
+        res.send(bugs);
+    } catch(error) {
+        handleError(error, res);
     }
 }
 
 /*module.exports = function(app) {
-    app.use(bodyParser.json());
-    app.use(bodyParser.urlencoded({extended: true}));
-
-    app.get('/api/bugs', function(req, res) {
-        Bugs.find({}, function(err, bugs) {
-            if(err) throw err;
-            res.send(bugs);
-        });
-    });
-
-    app.get('/api/bug/:id', function(req, res) {
-        Bugs.findById({_id: req.params.id}, function(err, bug) {
-            if(err) throw err;
-            res.send(bug);
-        });
-    });
-
-    app.get('/api/bugs/:status', function(req, res) {
-        Bugs.find({status: req.params.status}, function(err, bugs) {
-            if(err) throw err;
-            res.send(bugs);
-        });
-    });
-
     app.post('/api/bug', function(req, res) {
         var newBug = Bugs({
             title: req.body.title,
@@ -67,6 +55,7 @@ const getById = async (req, res) => {
 };
 */
 module.exports = {
-    getAll: getAll,
-    getById: getById
+    getAll,
+    getById,
+    getByStatus
 };
