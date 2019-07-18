@@ -49,25 +49,13 @@ const reportNewBug = async (req, res) => {
 
 const deleteBug = async (req, res) => {
     try {
-        Bugs.findByIdAndDelete(req.body.id);
+        await Bugs.findByIdAndDelete(req.body.id);
         res.send('Success');
     } catch(error) {
         handleError(error, res);
     }
 };
 
-
-
-/*module.exports = function(app) {
-
-    app.delete('/api/bug', function(req, res) {
-        Bugs.findByIdAndRemove(req.body.id, function(err) {
-            if(err) throw err;
-            res.send('Success');
-        });
-    });
-};
-*/
 module.exports = {
     getAll,
     getById,

@@ -1,5 +1,4 @@
 const apiController = require('../controllers/api');
-const bodyParser = require('body-parser');
 
 module.exports = (app) => {
     app.get('/api/bugs', apiController.getAll);
