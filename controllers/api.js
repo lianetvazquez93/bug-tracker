@@ -47,19 +47,18 @@ const reportNewBug = async (req, res) => {
     }
 };
 
+const deleteBug = async (req, res) => {
+    try {
+        Bugs.findByIdAndDelete(req.body.id);
+        res.send('Success');
+    } catch(error) {
+        handleError(error, res);
+    }
+};
+
+
+
 /*module.exports = function(app) {
-    app.post('/api/bug', function(req, res) {
-        var newBug = Bugs({
-            title: req.body.title,
-            body: req.body.body,
-            reporterEmail: req.body.reporterEmail,
-            status: "opened"
-        });
-        newBug.save(function(err) {
-            if(err) throw err;
-            res.send('Success');
-        });
-    });
 
     app.delete('/api/bug', function(req, res) {
         Bugs.findByIdAndRemove(req.body.id, function(err) {
@@ -73,5 +72,6 @@ module.exports = {
     getAll,
     getById,
     getByStatus,
-    reportNewBug
+    reportNewBug, 
+    deleteBug
 };

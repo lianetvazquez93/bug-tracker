@@ -9,4 +9,6 @@ module.exports = (app) => {
     app.get('/api/bugs/:status', apiController.getByStatus);
 
     app.post('/api/bug', apiController.reportNewBug);
+
+    app.delete('/api/bug', apiController.deleteBug);
 }
