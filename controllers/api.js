@@ -21,7 +21,7 @@ const getById = async (req, res) => {
     } catch(error) {
         handleError(error, res);
     }
-}
+};
 
 const getByStatus = async (req, res) => {
     try {
@@ -30,7 +30,22 @@ const getByStatus = async (req, res) => {
     } catch(error) {
         handleError(error, res);
     }
-}
+};
+
+const reportNewBug = async (req, res) => {
+    try {
+        let newBug = Bugs({
+            title: req.body.title,
+            body: req.body.body,
+            reporterEmail: req.body.reporterEmail,
+            status: "opened" 
+        });
+        newBug.save();
+        res.send('Succes');
+    } catch(error) {
+        handleError(error,res);
+    }
+};
 
 /*module.exports = function(app) {
     app.post('/api/bug', function(req, res) {
@@ -57,5 +72,6 @@ const getByStatus = async (req, res) => {
 module.exports = {
     getAll,
     getById,
-    getByStatus
+    getByStatus,
+    reportNewBug
 };
