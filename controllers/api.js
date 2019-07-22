@@ -7,7 +7,7 @@ const handleError = (error, res) => {
 
 const getAll = async (req, res) => {
     try {
-        let bugs = await Bugs.find();
+        const bugs = await Bugs.find(req.query);
         res.send(bugs);
     } catch(err) {
         handleError(err, res);
@@ -17,16 +17,10 @@ const getAll = async (req, res) => {
 const getById = async (req, res) => {
     try {
         let bug = await Bugs.findById(req.params.id);
+        if(!bug) {
+            throw new Error('Bug not found');
+        }
         res.send(bug);
-    } catch(error) {
-        handleError(error, res);
-    }
-};
-
-const getByStatus = async (req, res) => {
-    try {
-        let bugs = await Bugs.find({status: req.params.status});
-        res.send(bugs);
     } catch(error) {
         handleError(error, res);
     }
@@ -73,7 +67,6 @@ const updateBug = async (req, res) => {
 module.exports = {
     getAll,
     getById,
-    getByStatus,
     reportNewBug, 
     deleteBug,
     updateBug
