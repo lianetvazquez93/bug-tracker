@@ -67,7 +67,7 @@ const updateBug = async (req, res) => {
                 body: req.body.body,
                 reporterEmail: req.body.reporterEmail,
                 status: req.body.status
-            });
+            }, {omitUndefined: true});
             res.send('Success');
         }
     } catch(error) {
