@@ -9,8 +9,6 @@ router.post('/login', authController.login);
 
 router.get('/bugs', isAuthenticated, apiController.getAll);
 
-router.get('/bug/:id', apiController.getById);
-
 router.post('/bug', isAuthenticated, apiController.reportNewBug);
 
 router.delete('/bug', apiController.deleteBug);
