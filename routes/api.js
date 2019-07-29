@@ -11,8 +11,8 @@ router.get('/bugs', isAuthenticated, apiController.getAll);
 
 router.post('/bug', isAuthenticated, apiController.reportNewBug);
 
-router.delete('/bug', apiController.deleteBug);
+router.delete('/bug', isAuthenticated, apiController.deleteBug);
 
-router.put('/bug', apiController.updateBug);
+router.put('/bug', isAuthenticated, apiController.updateBug);
 
 module.exports = router;

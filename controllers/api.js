@@ -40,6 +40,10 @@ const reportNewBug = async (req, res) => {
 
 const deleteBug = async (req, res) => {
     try {
+        let bugToDelete = await Bugs.findById(req.body.id);
+        if(bugToDelete.reporterEmail !== req.user) {
+            throw new Error('Bug not found');
+        }
         await Bugs.findByIdAndDelete(req.body.id);
         res.send('Success');
     } catch(error) {
@@ -55,6 +59,9 @@ const updateBug = async (req, res) => {
             closed: 2
         };
         let bugToUpdate = await Bugs.findById(req.body.id);
+        if (bugToUpdate.reporterEmail !== req.user) {
+            throw new Error('Bug not found');
+        }
         if(!(statusDictionary[req.body.status] - statusDictionary[bugToUpdate.status] === 0|| 
              statusDictionary[req.body.status] - statusDictionary[bugToUpdate.status] === 1)) {
             throw new Error('Status update not posible');
