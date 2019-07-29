@@ -7,7 +7,7 @@ const handleError = (error, res) => {
 
 const getAll = async (req, res) => {
     try {
-        const bugs = await Bugs.find(req.query);
+        const bugs = await Bugs.find({reporterEmail: req.user});
         res.send(bugs);
     } catch(err) {
         handleError(err, res);
@@ -31,7 +31,7 @@ const reportNewBug = async (req, res) => {
         let newBug = Bugs({
             title: req.body.title,
             body: req.body.body,
-            reporterEmail: req.body.reporterEmail,
+            reporterEmail: req.user,
             status: "opened" 
         });
         newBug.save();
