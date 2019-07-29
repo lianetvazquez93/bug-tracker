@@ -1,13 +1,19 @@
 const apiController = require('../controllers/api');
+const authController = require('../controllers/auth');
+const { Router } = require('express');
 
-module.exports = (app) => {
-    app.get('/api/bugs', apiController.getAll);
+const router = Router();
 
-    app.get('/api/bug/:id', apiController.getById);
+router.post('/login', authController.login);
 
-    app.post('/api/bug', apiController.reportNewBug);
+router.get('/bugs', apiController.getAll);
 
-    app.delete('/api/bug', apiController.deleteBug);
+router.get('/bug/:id', apiController.getById);
 
-    app.put('/api/bug', apiController.updateBug);
-}
+router.post('/bug', apiController.reportNewBug);
+
+router.delete('/bug', apiController.deleteBug);
+
+router.put('/bug', apiController.updateBug);
+
+module.exports = router;

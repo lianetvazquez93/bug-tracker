@@ -14,6 +14,6 @@ app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
 setupController(app);
-apiRoutes(app);
+app.use('/api', apiRoutes);
 
 app.listen(process.env.PORT);
