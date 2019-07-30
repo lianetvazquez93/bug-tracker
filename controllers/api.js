@@ -62,18 +62,21 @@ const updateBug = async (req, res) => {
         if (bugToUpdate.reporterEmail !== req.user) {
             throw new Error('Bug not found');
         }
-        if(!(statusDictionary[req.body.status] - statusDictionary[bugToUpdate.status] === 0|| 
-             statusDictionary[req.body.status] - statusDictionary[bugToUpdate.status] === 1)) {
-            throw new Error('Status update not posible');
-        } else {
-            await Bugs.findByIdAndUpdate(req.body.id, {
-                title: req.body.title,
-                body: req.body.body,
-                reporterEmail: req.body.reporterEmail,
-                status: req.body.status
-            }, {omitUndefined: true});
-            res.send('Success');
+        if(req.body.status) {
+            if(!(statusDictionary[req.body.status] - statusDictionary[bugToUpdate.status] === 1)) {
+                throw new Error('Status update not posible');
+            }
         }
+        
+        await Bugs.findByIdAndUpdate(req.body.id, {
+            title: req.body.title,
+            body: req.body.body,
+            reporterEmail: req.body.reporterEmail,
+            status: req.body.status
+        }, {omitUndefined: true});
+            
+        res.send('Success');
+        
     } catch(error) {
         handleError(error, res);
     }
