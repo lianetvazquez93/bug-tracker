@@ -1,9 +1,12 @@
 const apiController = require('../controllers/api');
 const authController = require('../controllers/auth');
+const userController = require('../controllers/user');
 const { Router } = require('express');
 const { isAuthenticated } = require('../middleware');
 
 const router = Router();
+
+router.post('/register', userController.register);
 
 router.post('/login', authController.login);
 
