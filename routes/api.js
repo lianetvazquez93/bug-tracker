@@ -12,6 +12,8 @@ router.post('/register', userController.register);
 
 router.post('/login', authController.login);
 
+router.delete('/user', isAuthenticated, userController.deleteUser);
+
 router.get('/bugs', isAuthenticated, apiController.getAll);
 
 router.post('/bug', isAuthenticated, apiController.reportNewBug);
