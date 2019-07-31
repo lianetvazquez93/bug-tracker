@@ -6,6 +6,8 @@ const { isAuthenticated } = require('../middleware');
 
 const router = Router();
 
+router.get('/profile', isAuthenticated, userController.profile);
+
 router.post('/register', userController.register);
 
 router.post('/login', authController.login);
