@@ -1,4 +1,4 @@
-const apiController = require('../controllers/api');
+const bugController = require('../controllers/bug');
 const authController = require('../controllers/auth');
 const userController = require('../controllers/user');
 const { Router } = require('express');
@@ -12,14 +12,14 @@ router.post('/register', userController.register);
 
 router.post('/login', authController.login);
 
-router.delete('/user', isAuthenticated, userController.deleteUser);
+router.delete('/user', isAuthenticated, userController.deleteUser,bugController.deleteAllBugs);
 
-router.get('/bugs', isAuthenticated, apiController.getAll);
+router.get('/bugs', isAuthenticated, bugController.getAll);
 
-router.post('/bug', isAuthenticated, apiController.reportNewBug);
+router.post('/bug', isAuthenticated, bugController.reportNewBug);
 
-router.delete('/bug', isAuthenticated, apiController.deleteBug);
+router.delete('/bug', isAuthenticated, bugController.deleteBug);
 
-router.put('/bug', isAuthenticated, apiController.updateBug);
+router.put('/bug', isAuthenticated, bugController.updateBug);
 
 module.exports = router;

@@ -1,5 +1,4 @@
 const Users = require('../models/user');
-const Bugs = require('../models/bug');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 
@@ -31,12 +30,12 @@ const profile = async (req, res) => {
     }
 };
 
-const deleteUser = async (req, res) => {
+const deleteUser = async (req, res, next) => {
     try {
         await Users.findOneAndDelete({email: req.user});
-        await Bugs.deleteMany({ reporterEmail: req.user });
-
         res.send('User deleted!');
+
+        next();
     } catch(error) {
         res.status(400).send(error.message);
     }

@@ -82,9 +82,19 @@ const updateBug = async (req, res) => {
     }
 };
 
+const deleteAllBugs = async (req,res) => {
+    try {
+        await Bugs.deleteMany({ reporterEmail: req.user });
+        res.send('All bugs deleted');
+    } catch(error) {
+        res.status(400).send(error.message);
+    }
+};
+
 module.exports = {
     getAll,
     reportNewBug, 
     deleteBug,
-    updateBug
+    updateBug,
+    deleteAllBugs
 };
