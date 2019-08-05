@@ -12,7 +12,7 @@ router.post('/register', userController.register);
 
 router.post('/login', authController.login);
 
-router.delete('/user', isAuthenticated, userController.deleteUser,bugController.deleteAllBugs);
+router.delete('/user', isAuthenticated, userController.deleteUser);
 
 router.get('/bugs', isAuthenticated, bugController.getAll);
 

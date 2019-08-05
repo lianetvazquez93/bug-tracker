@@ -1,18 +1,13 @@
 const Users = require('../models/user');
-const bcrypt = require('bcrypt');
-const saltRounds = 10;
 
 const register = async (req, res) => {
     try {
-        const { username, password, email } = req.body;
-        bcrypt.hash(password, saltRounds, function(err, hash) {
-            Users.create({
-                username: username,
-                password: hash,
-                email: email
-            });
+        await Users.create({
+            username: req.body.username,
+            password: req.body.password,
+            email: req.body.email
         });
-        res.send('Success');
+        res.send('User saved!');
     } catch(error) {
         res.status(400).send(error.message);
     }
@@ -30,12 +25,10 @@ const profile = async (req, res) => {
     }
 };
 
-const deleteUser = async (req, res, next) => {
+const deleteUser = async (req, res) => {
     try {
-        await Users.findOneAndDelete({email: req.user});
+        await Users.deleteOne({email: req.user});
         res.send('User deleted!');
-
-        next();
     } catch(error) {
         res.status(400).send(error.message);
     }

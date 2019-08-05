@@ -32,7 +32,7 @@ const reportNewBug = async (req, res) => {
             status: "opened" 
         });
         newBug.save();
-        res.send('Succes');
+        res.send('Bug saved!');
     } catch(error) {
         handleError(error,res);
     }
@@ -45,7 +45,7 @@ const deleteBug = async (req, res) => {
             throw new Error('Bug not found');
         }
         await Bugs.findByIdAndDelete(req.body.id);
-        res.send('Success');
+        res.send('Bug deleted!');
     } catch(error) {
         handleError(error, res);
     }
@@ -75,19 +75,10 @@ const updateBug = async (req, res) => {
             status: req.body.status
         }, {omitUndefined: true});
             
-        res.send('Success');
+        res.send('Bug updated!');
         
     } catch(error) {
         handleError(error, res);
-    }
-};
-
-const deleteAllBugs = async (req,res) => {
-    try {
-        await Bugs.deleteMany({ reporterEmail: req.user });
-        res.send('All bugs deleted');
-    } catch(error) {
-        res.status(400).send(error.message);
     }
 };
 
@@ -95,6 +86,5 @@ module.exports = {
     getAll,
     reportNewBug, 
     deleteBug,
-    updateBug,
-    deleteAllBugs
+    updateBug
 };
