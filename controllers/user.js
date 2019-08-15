@@ -34,8 +34,35 @@ const deleteUser = async (req, res) => {
   }
 };
 
+const updateUser = async (req, res, next) => {
+  try {
+    const filter = { email: req.user };
+    let userToUpdate = await Users.findOne(filter);
+
+    if (!userToUpdate) {
+      throw new Error("User not found");
+    }
+
+    if (req.body.username) {
+      userToUpdate.username = req.body.username;
+    }
+    if (req.body.password) {
+      userToUpdate.password = req.body.password;
+    }
+    if (req.body.email) {
+      userToUpdate.email = req.body.email;
+    }
+
+    await userToUpdate.save();
+    res.send("User updated!");
+  } catch (error) {
+    res.status(400).send(error.message);
+  }
+};
+
 module.exports = {
   register,
   profile,
   deleteUser,
+  updateUser,
 };
