@@ -85,9 +85,20 @@ const updateBug = async (req, res) => {
   }
 };
 
+const updateEmail = async (req, res) => {
+  try {
+    const filter = { reporterEmail: req.user };
+    await Bugs.updateMany(filter, { reporterEmail: req.body.email }, { omitUndefined: true });
+    res.send("User updated!");
+  } catch (error) {
+    res.status(400).send(error.message);
+  }
+};
+
 module.exports = {
   getAll,
   reportNewBug,
   deleteBug,
   updateBug,
+  updateEmail,
 };

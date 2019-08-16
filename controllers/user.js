@@ -54,7 +54,7 @@ const updateUser = async (req, res, next) => {
     }
 
     await userToUpdate.save();
-    res.send("User updated!");
+    next();
   } catch (error) {
     res.status(400).send(error.message);
   }

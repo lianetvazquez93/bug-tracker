@@ -14,7 +14,7 @@ router.post("/login", authController.login);
 
 router.delete("/user", isAuthenticated, userController.deleteUser);
 
-router.put("/user", isAuthenticated, userController.updateUser);
+router.put("/user", isAuthenticated, userController.updateUser, bugController.updateEmail);
 
 router.get("/bugs", isAuthenticated, bugController.getAll);
 
