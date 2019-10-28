@@ -1,14 +1,10 @@
 const mongoose = require("mongoose");
 
-const { Schema } = mongoose;
-
-const bugSchema = new Schema({
+const bugSchema = mongoose.Schema({
   title: String,
   body: String,
   reporterEmail: String,
   status: String,
 });
 
-const Bugs = mongoose.model("Bugs", bugSchema);
-
-module.exports = Bugs;
+module.exports = mongoose.model("Bug", bugSchema);

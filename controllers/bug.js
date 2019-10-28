@@ -1,64 +1,61 @@
-const Bugs = require("../models/bug");
-
-const handleError = (error, res) => {
-  console.error(`Error: ${error.message}`);
-  res.status(400).send({ Error: error.message });
-};
+const Bug = require("../models/bug");
 
 const getAll = async (req, res) => {
   try {
     const { id, status } = req.query;
     let bugs = [];
     if (id && !status) {
-      bugs = await Bugs.find({ reporterEmail: req.user, _id: id });
+      bugs = await Bug.findById(id);
     } else if (status && !id) {
-      bugs = await Bugs.find({ reporterEmail: req.user, status: status });
+      bugs = await Bug.find({ status });
     } else {
-      bugs = await Bugs.find({ reporterEmail: req.user });
+      bugs = await Bug.find();
     }
 
     res.send(bugs);
-  } catch (err) {
-    handleError(err, res);
+  } catch (error) {
+    res.status(400).send(error.message);
   }
 };
 
 const reportNewBug = async (req, res) => {
   try {
-    let newBug = Bugs({
+    const newBug = Bug({
       title: req.body.title,
       body: req.body.body,
       reporterEmail: req.user,
       status: "opened",
     });
-    newBug.save();
-    res.send("Bug saved!");
+    await newBug.save();
+    res.status(201).json(newBug);
   } catch (error) {
-    handleError(error, res);
+    res.status(400).send(error.message);
   }
 };
 
-const deleteBug = async (req, res) => {
+const remove = async (req, res) => {
   try {
-    let bugToDelete = await Bugs.findById(req.body.id);
+    const id = req.params.id;
+    const bugToDelete = await Bug.findById(id);
     if (bugToDelete.reporterEmail !== req.user) {
       throw new Error("Bug not found");
     }
-    await Bugs.findByIdAndDelete(req.body.id);
-    res.send("Bug deleted!");
+    await Bug.findByIdAndDelete(id);
+    res.send(await Bug.find());
   } catch (error) {
-    handleError(error, res);
+    res.status(400).send(error.message);
   }
 };
 
-const updateBug = async (req, res) => {
+const update = async (req, res) => {
   try {
     const statusDictionary = {
       opened: 0,
       development: 1,
       closed: 2,
     };
-    let bugToUpdate = await Bugs.findById(req.body.id);
+    const id = req.params.id;
+    const bugToUpdate = await Bug.findById(id);
     if (bugToUpdate.reporterEmail !== req.user) {
       throw new Error("Bug not found");
     }
@@ -68,8 +65,8 @@ const updateBug = async (req, res) => {
       }
     }
 
-    await Bugs.findByIdAndUpdate(
-      req.body.id,
+    await Bug.findByIdAndUpdate(
+      id,
       {
         title: req.body.title,
         body: req.body.body,
@@ -79,17 +76,7 @@ const updateBug = async (req, res) => {
       { omitUndefined: true }
     );
 
-    res.send("Bug updated!");
-  } catch (error) {
-    handleError(error, res);
-  }
-};
-
-const updateEmail = async (req, res) => {
-  try {
-    const filter = { reporterEmail: req.user };
-    await Bugs.updateMany(filter, { reporterEmail: req.body.email }, { omitUndefined: true });
-    res.send("User updated!");
+    res.send(await Bug.findById(id));
   } catch (error) {
     res.status(400).send(error.message);
   }
@@ -98,7 +85,6 @@ const updateEmail = async (req, res) => {
 module.exports = {
   getAll,
   reportNewBug,
-  deleteBug,
-  updateBug,
-  updateEmail,
+  update,
+  remove,
 };

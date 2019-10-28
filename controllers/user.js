@@ -1,13 +1,14 @@
-const Users = require("../models/user");
+const User = require("../models/user");
 
 const register = async (req, res) => {
   try {
-    await Users.create({
+    const newUser = User({
       username: req.body.username,
       password: req.body.password,
       email: req.body.email,
     });
-    res.send("User saved!");
+    await newUser.save();
+    res.status(201).json(await User.findById(newUser.id).select("-password"));
   } catch (error) {
     res.status(400).send(error.message);
   }
@@ -15,46 +16,62 @@ const register = async (req, res) => {
 
 const profile = async (req, res) => {
   try {
-    const { username, email } = await Users.findOne({ email: req.user });
-    if (!username) {
+    const user = await User.findOne({ email: req.user });
+    if (!user) {
       throw new Error("User not found");
     }
-    res.send(`Username: ${username}, Email: ${email}.`);
+    res.json(await User.findById(user._id).select("-password"));
   } catch (error) {
     res.status(400).send(error.message);
   }
 };
 
-const deleteUser = async (req, res) => {
+const remove = async (req, res) => {
   try {
-    await Users.deleteOne({ email: req.user });
-    res.send("User deleted!");
+    const id = req.params.id;
+    const userToDelete = await User.findById(id);
+
+    if (!userToDelete) {
+      throw new Error("User not found");
+    }
+
+    if (userToDelete.email !== req.user) {
+      throw new Error("Not Authorized");
+    }
+    await User.findByIdAndDelete(id);
+    res.send(await User.find().select("-password"));
   } catch (error) {
     res.status(400).send(error.message);
   }
 };
 
-const updateUser = async (req, res, next) => {
+const update = async (req, res) => {
   try {
-    const filter = { email: req.user };
-    let userToUpdate = await Users.findOne(filter);
+    const id = req.params.id;
+    const userToUpdate = await User.findById(id);
 
     if (!userToUpdate) {
       throw new Error("User not found");
     }
 
-    if (req.body.username) {
-      userToUpdate.username = req.body.username;
+    if (userToUpdate.email !== req.user) {
+      throw new Error("Not authorized");
     }
-    if (req.body.password) {
-      userToUpdate.password = req.body.password;
+
+    const { username, email, password } = req.body;
+
+    if (username) {
+      userToUpdate.username = username;
     }
-    if (req.body.email) {
-      userToUpdate.email = req.body.email;
+    if (password) {
+      userToUpdate.password = password;
+    }
+    if (email) {
+      userToUpdate.email = email;
     }
 
     await userToUpdate.save();
-    next();
+    res.json(await User.findById(id).select("-password"));
   } catch (error) {
     res.status(400).send(error.message);
   }
@@ -63,6 +80,6 @@ const updateUser = async (req, res, next) => {
 module.exports = {
   register,
   profile,
-  deleteUser,
-  updateUser,
+  update,
+  remove,
 };

@@ -2,9 +2,7 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
 
-const { Schema } = mongoose;
-
-const userSchema = new Schema({
+const userSchema = mongoose.Schema({
   username: String,
   password: String,
   email: String,
@@ -17,13 +15,11 @@ userSchema.pre("save", function(next) {
 
 userSchema.post("deleteOne", { document: true }, function() {
   let email = this.getQuery()["email"];
-  mongoose.model("Bugs").deleteMany({ reporterEmail: email }, function(err) {
+  mongoose.model("Bug").deleteMany({ reporterEmail: email }, function(err) {
     if (err) {
       throw err;
     }
   });
 });
 
-const Users = mongoose.model("Users", userSchema);
-
-module.exports = Users;
+module.exports = mongoose.model("User", userSchema);
