@@ -22,9 +22,9 @@ const reportNewBug = async (req, res) => {
   try {
     const newBug = Bug({
       title: req.body.title,
-      body: req.body.body,
-      reporterEmail: req.user,
-      status: "opened",
+      description: req.body.description,
+      reporterEmail: req.user.email,
+      reporterId: req.user.id,
     });
     await newBug.save();
     res.status(201).json(newBug);
@@ -37,7 +37,7 @@ const remove = async (req, res) => {
   try {
     const id = req.params.id;
     const bugToDelete = await Bug.findById(id);
-    if (bugToDelete.reporterEmail !== req.user) {
+    if (!bugToDelete || bugToDelete.reporterEmail !== req.user.email) {
       throw new Error("Bug not found");
     }
     await Bug.findByIdAndDelete(id);
@@ -56,7 +56,7 @@ const update = async (req, res) => {
     };
     const id = req.params.id;
     const bugToUpdate = await Bug.findById(id);
-    if (bugToUpdate.reporterEmail !== req.user) {
+    if (!bugToUpdate || bugToUpdate.reporterEmail !== req.user.email) {
       throw new Error("Bug not found");
     }
     if (req.body.status) {
@@ -69,8 +69,7 @@ const update = async (req, res) => {
       id,
       {
         title: req.body.title,
-        body: req.body.body,
-        reporterEmail: req.body.reporterEmail,
+        description: req.body.description,
         status: req.body.status,
       },
       { omitUndefined: true }

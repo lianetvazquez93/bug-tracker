@@ -3,9 +3,18 @@ const bcrypt = require("bcrypt");
 const saltRounds = 10;
 
 const userSchema = mongoose.Schema({
-  username: String,
-  password: String,
-  email: String,
+  username: {
+    type: String,
+    required: true,
+  },
+  password: {
+    type: String,
+    required: true,
+  },
+  email: {
+    type: String,
+    required: true,
+  },
 });
 
 userSchema.pre("save", function(next) {
@@ -13,13 +22,25 @@ userSchema.pre("save", function(next) {
   next();
 });
 
-userSchema.post("deleteOne", { document: true }, function() {
-  let email = this.getQuery()["email"];
-  mongoose.model("Bug").deleteMany({ reporterEmail: email }, function(err) {
-    if (err) {
-      throw err;
-    }
-  });
+userSchema.post("findOneAndUpdate", async function(next) {
+  try {
+    const id = this.getQuery()["_id"];
+    const { email } = await mongoose.model("User").findById(id);
+    await mongoose
+      .model("Bug")
+      .updateMany({ reporterId: id }, { reporterEmail: email }, { omitUndefined: true });
+  } catch (error) {
+    next(error);
+  }
+});
+
+userSchema.post("findOneAndDelete", async function(next) {
+  try {
+    const id = this.getQuery()["_id"];
+    await mongoose.model("Bug").deleteMany({ reporterId: id });
+  } catch (error) {
+    next(error);
+  }
 });
 
 module.exports = mongoose.model("User", userSchema);

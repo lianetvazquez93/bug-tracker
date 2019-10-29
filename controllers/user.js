@@ -16,7 +16,7 @@ const register = async (req, res) => {
 
 const profile = async (req, res) => {
   try {
-    const user = await User.findOne({ email: req.user });
+    const user = await User.findById(req.user.id);
     if (!user) {
       throw new Error("User not found");
     }
@@ -35,7 +35,7 @@ const remove = async (req, res) => {
       throw new Error("User not found");
     }
 
-    if (userToDelete.email !== req.user) {
+    if (userToDelete.email !== req.user.email) {
       throw new Error("Not Authorized");
     }
     await User.findByIdAndDelete(id);
@@ -54,23 +54,26 @@ const update = async (req, res) => {
       throw new Error("User not found");
     }
 
-    if (userToUpdate.email !== req.user) {
+    if (userToUpdate.email !== req.user.email) {
       throw new Error("Not authorized");
     }
 
     const { username, email, password } = req.body;
 
-    if (username) {
-      userToUpdate.username = username;
-    }
     if (password) {
       userToUpdate.password = password;
-    }
-    if (email) {
-      userToUpdate.email = email;
+      await userToUpdate.save();
     }
 
-    await userToUpdate.save();
+    await User.findByIdAndUpdate(
+      id,
+      {
+        username,
+        email,
+      },
+      { omitUndefined: true }
+    );
+
     res.json(await User.findById(id).select("-password"));
   } catch (error) {
     res.status(400).send(error.message);
